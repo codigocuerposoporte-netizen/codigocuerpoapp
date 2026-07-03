@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CÓDIGO CUERPO - 3 Mockups Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; background: #f5f0eb; color: #2f1d24; }
+    
+    .header {
+      background: linear-gradient(135deg, #a23b68 0%, #cf6689 50%, #6aa99b 100%);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 10px; }
+    .header p { font-size: 0.9rem; opacity: 0.95; }
+    
+    .tabs {
+      display: flex;
+      gap: 0;
+      background: white;
+      border-bottom: 2px solid #e8d5d5;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .tab {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      background: white;
+      cursor: pointer;
+      font-weight: 600;
+      color: #a23b68;
+      transition: all 0.3s;
+    }
+    .tab.active { background: #f9f5f1; border-bottom: 3px solid #a23b68; }
+    .tab:hover { background: #f9f5f1; }
+    
+    .mockup-section {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    .mockup-section.active { display: block; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .phone-frame {
+      max-width: 420px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 40px;
+      border: 12px solid #1a1a1a;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+      overflow: hidden;
+      position: relative;
+    }
+    .phone-frame::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 25px;
+      background: #1a1a1a;
+      border-radius: 0 0 20px 20px;
+      z-index: 10;
+    }
+    .screen {
+      min-height: 800px;
+      overflow: hidden;
+    }
+    
+    /* ===== OPCIÓN 1: LUXURY GLASS ===== */
+    .opt1-bg {
+      background: linear-gradient(135deg, rgba(245, 220, 224, 0.96) 0%, rgba(250, 245, 239, 0.96) 44%, rgba(229, 244, 239, 0.96) 100%),
+                  linear-gradient(40deg, rgba(189, 86, 125, 0.16), rgba(13, 141, 112, 0.13));
+      min-height: 100%;
+    }
+    
+    .opt1-header {
+      margin: 10px 12px 0;
+      padding: 14px 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      box-shadow: 0 14px 34px rgba(189, 86, 125, 0.14);
+      backdrop-filter: blur(22px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .opt1-header-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #2f1d24;
+    }
+    .opt1-header-greeting { font-size: 0.7rem; color: #a23b68; font-weight: 600; }
+    
+    .opt1-hero {
+      margin: 16px 20px 14px;
+      padding: 24px 20px 22px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(163, 63, 108, 0.72), rgba(189, 86, 125, 0.5) 42%, rgba(13, 141, 112, 0.48)), rgba(255, 255, 255, 0.34);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      box-shadow: 0 24px 56px rgba(189, 86, 125, 0.3), 0 14px 34px rgba(13, 141, 112, 0.18);
+      backdrop-filter: blur(24px);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .opt1-hero::before {
+      content: '';
+      position: absolute;
+      right: -42px;
+      top: -38px;
+      width: 156px;
+      height: 156px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.13);
+    }
+    .opt1-hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.3rem;
+      line-height: 1.05;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .opt1-hero p {
+      font-size: 0.88rem;
+      line-height: 1.55;
+      max-width: 310px;
+      margin-bottom: 18px;
+      opacity: 0.95;
+      position: relative;
+      z-index: 1;
+    }
+    .opt1-cta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .opt1-btn-primary {
+      padding: 13px 20px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.58);
+      background: rgba(255, 255, 255, 0.22);
+      color: white;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .opt1-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(61, 43, 37, 0.2); }
+    .opt1-btn-ghost {
+      padding: 13px 20px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.78);
+      color: #a23b68;
+      border: none;
+      font-size: 0.86rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .opt1-btn-ghost:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(189, 86, 125, 0.16); }
+    
+    .opt1-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 0 20px 20px;
+    }
+    .opt1-stat-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.40));
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      border-radius: 14px;
+      padding: 12px 10px;
+      box-shadow: 0 16px 34px rgba(189, 86, 125, 0.14);
+      backdrop-filter: blur(18px);
+      text-align: center;
+    }
+    .opt1-stat-card strong { display: block; font-size: 1.2rem; color: #2f1d24; line-height: 1; margin-bottom: 7px; }
+    .opt1-stat-card span { display: block; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; color: #8b6d73; font-weight: 800; }
+    
+    /* ===== OPCIÓN 2: WARM MINIMAL ===== */
+    .opt2-bg {
+      background: linear-gradient(135deg, #faf5ef 0%, #f5f0eb 50%, #f0ebe5 100%);
+      min-height: 100%;
+    }
+    
+    .opt2-header {
+      background: white;
+      border-bottom: 1px solid #e8d5d5;
+      padding: 16px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .opt2-header-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #2f1d24;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .opt2-logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #a23b68, #cf6689);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 800;
+    }
+    .opt2-header-icons { display: flex; gap: 8px; }
+    .opt2-icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: white;
+      border: 1px solid #e8d5d5;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      color: #a23b68;
+      font-size: 1.2rem;
+    }
+    
+    .opt2-hero {
+      margin: 14px 20px 20px;
+      padding: 22px 20px 20px;
+      background: linear-gradient(135deg, #a23b68 0%, #d0678d 100%);
+      border-radius: 28px;
+      color: white;
+    }
+    .opt2-hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .opt2-hero p {
+      font-size: 0.86rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      opacity: 0.95;
+    }
+    .opt2-cta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .opt2-btn {
+      padding: 11px 16px;
+      border-radius: 12px;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .opt2-btn-primary { background: white; color: #a23b68; }
+    .opt2-btn-primary:hover { transform: translateY(-1px); }
+    .opt2-btn-secondary { background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.4); }
+    .opt2-btn-secondary:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); }
+    
+    .opt2-tools {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 0 20px 24px;
+    }
+    .opt2-tool-card {
+      min-height: 130px;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid #e8d5d5;
+      padding: 60px 15px 15px;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(162, 59, 104, 0.1);
+      text-align: left;
+    }
+    .opt2-tool-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 54px;
+      border-radius: 16px 16px 0 0;
+      background: linear-gradient(135deg, #0d8d70, #6fa99b);
+    }
+    .opt2-tool-card strong { display: block; font-size: 0.9rem; color: #2f1d24; margin-bottom: 3px; }
+    .opt2-tool-card small { display: block; font-size: 0.7rem; color: #8b6d73; line-height: 1.2; }
+    
+    /* ===== OPCIÓN 3: BOLD VIBRANT ===== */
+    .opt3-bg {
+      background: linear-gradient(135deg, #fef6f3 0%, #faf7f4 50%, #f5f3f1 100%);
+      min-height: 100%;
+    }
+    
+    .opt3-header {
+      background: linear-gradient(135deg, rgba(162, 59, 104, 0.08), rgba(13, 141, 112, 0.08));
+      padding: 14px 16px;
+      border-bottom: 2px solid #e8d5d5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .opt3-header-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a23b68, #6fa99b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .opt3-hero {
+      margin: 16px 16px 16px;
+      padding: 20px 16px;
+      background: linear-gradient(135deg, #a23b68 0%, #6fa99b 100%);
+      border-radius: 24px;
+      color: white;
+      box-shadow: 0 20px 50px rgba(162, 59, 104, 0.2);
+    }
+    .opt3-hero-line {
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 8px;
+    }
+    .opt3-hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .opt3-hero p {
+      font-size: 0.84rem;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .opt3-cta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .opt3-btn {
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .opt3-btn-primary { background: white; color: #a23b68; }
+    .opt3-btn-primary:hover { transform: scale(1.02); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15); }
+    .opt3-btn-secondary { background: rgba(255, 255, 255, 0.25); color: white; border: 1px solid rgba(255, 255, 255, 0.5); }
+    .opt3-btn-secondary:hover { background: rgba(255, 255, 255, 0.35); }
+    
+    .opt3-body-map {
+      margin: 16px;
+      padding: 14px;
+      background: white;
+      border-radius: 18px;
+      border: 1.5px solid #e8d5d5;
+      text-align: center;
+    }
+    .opt3-body-map-placeholder {
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(135deg, rgba(162, 59, 104, 0.1), rgba(13, 141, 112, 0.1));
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    .opt3-body-map-text {
+      font-size: 0.75rem;
+      color: #8b6d73;
+      font-weight: 600;
+    }
+    
+    .description {
+      background: white;
+      margin: 30px;
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 4px solid #a23b68;
+    }
+    .description h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: #a23b68;
+      margin-bottom: 8px;
+    }
+    .description p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #6b4c42;
+    }
+    
+    .vote-section {
+      text-align: center;
+      padding: 30px 20px;
+      background: white;
+      margin: 30px;
+      border-radius: 16px;
+      border: 2px solid #e8d5d5;
+    }
+    .vote-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: #2f1d24;
+      margin-bottom: 20px;
+    }
+    .vote-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .vote-btn {
+      padding: 12px 24px;
+      border: 2px solid #e8d5d5;
+      border-radius: 50px;
+      background: white;
+      color: #2f1d24;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .vote-btn:hover {
+      background: #a23b68;
+      color: white;
+      border-color: #a23b68;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>CÓDIGO CUERPO</h1>
+  <p>3 estilos visuales premium para elegir</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showMockup('opt1')">✨ Luxury Glass</button>
+  <button class="tab" onclick="showMockup('opt2')">🌸 Warm Minimal</button>
+  <button class="tab" onclick="showMockup('opt3')">💎 Bold Vibrant</button>
+</div>
+
+<!-- OPCIÓN 1: LUXURY GLASS -->
+<div id="opt1" class="mockup-section active">
+  <div class="phone-frame">
+    <div class="screen opt1-bg">
+      <div class="opt1-header">
+        <div class="opt1-header-logo">CC</div>
+        <div class="opt1-header-greeting">Buenos días</div>
+      </div>
+      
+      <div class="opt1-hero">
+        <div style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; opacity: 0.8; margin-bottom: 12px;">Biodescodificación</div>
+        <h2>Hola, hermosa</h2>
+        <p>Registra una señal corporal, descubre el patrón emocional y vuelve a tu centro con una práctica guiada.</p>
+        <div class="opt1-cta">
+          <button class="opt1-btn-primary">▶ Registrar</button>
+          <button class="opt1-btn-ghost">Explorar</button>
+        </div>
+      </div>
+      
+      <div class="opt1-stats">
+        <div class="opt1-stat-card">
+          <strong>12</strong>
+          <span>Registros</span>
+        </div>
+        <div class="opt1-stat-card">
+          <strong>3/7</strong>
+          <span>Reto hoy</span>
+        </div>
+        <div class="opt1-stat-card">
+          <strong>85%</strong>
+          <span>Conexión</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="description">
+    <h3>🎨 Luxury Glass — Sofisticado & Moderno</h3>
+    <p><strong>Características:</strong> Glassmorphism premium, fondos degradados suaves, mucho aire blanco, transiciones suaves. Se ve cara y premium. Ideal para crear sensación de "app de bienestar de lujo".</p>
+    <p><strong>Para quién:</strong> Mujeres que buscan experiencia meditativa y premium. Genera calma y confianza.</p>
+    <p><strong>Vibra:</strong> Exclusiva, calmada, tech-chic.</p>
+  </div>
+</div>
+
+<!-- OPCIÓN 2: WARM MINIMAL -->
+<div id="opt2" class="mockup-section">
+  <div class="phone-frame">
+    <div class="screen opt2-bg">
+      <div class="opt2-header">
+        <div class="opt2-header-logo">
+          <div class="opt2-logo-mark">CC</div>
+          <span>Código Cuerpo</span>
+        </div>
+        <div class="opt2-header-icons">
+          <div class="opt2-icon-btn">🔔</div>
+          <div class="opt2-icon-btn">👤</div>
+        </div>
+      </div>
+      
+      <div class="opt2-hero">
+        <h2>Hola, hermosa 🌸</h2>
+        <p>Registra una señal corporal, descubre el patrón emocional y vuelve a tu centro.</p>
+        <div class="opt2-cta">
+          <button class="opt2-btn opt2-btn-primary">▶ Registrar</button>
+          <button class="opt2-btn opt2-btn-secondary">Explorar →</button>
+        </div>
+      </div>
+      
+      <div class="opt2-tools">
+        <div class="opt2-tool-card">
+          <strong>Registros</strong>
+          <small>Historial de tus señales corporales</small>
+        </div>
+        <div class="opt2-tool-card">
+          <strong>Meditaciones</strong>
+          <small>Prácticas guiadas y tapping</small>
+        </div>
+        <div class="opt2-tool-card">
+          <strong>Reto 7 días</strong>
+          <small>Profundiza tu escucha</small>
+        </div>
+        <div class="opt2-tool-card">
+          <strong>Diario</strong>
+          <small>Preguntas para sanar</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="description">
+    <h3>🌸 Warm Minimal — Cálida & Accesible</h3>
+    <p><strong>Características:</strong> Diseño limpio, sin mucho ruido visual, emojis como decoración, botones claros, colores tierra cálidos. Fácil de usar, muy legible.</p>
+    <p><strong>Para quién:</strong> Mujeres que valoran claridad y facilidad. Menos es más. Sensación de "app de bienestar accesible y humana".</p>
+    <p><strong>Vibra:</strong> Cálida, accesible, auténtica.</p>
+  </div>
+</div>
+
+<!-- OPCIÓN 3: BOLD VIBRANT -->
+<div id="opt3" class="mockup-section">
+  <div class="phone-frame">
+    <div class="screen opt3-bg">
+      <div class="opt3-header">
+        <div class="opt3-header-logo">CÓDIGO CUERPO</div>
+        <div style="font-size: 1.2rem;">⚙️</div>
+      </div>
+      
+      <div class="opt3-hero">
+        <div class="opt3-hero-line">Biodescodificación · Cuerpo</div>
+        <h2>¿Cómo estás?</h2>
+        <p>Registra tu señal y descubre qué tu cuerpo intenta decirte.</p>
+        <div class="opt3-cta">
+          <button class="opt3-btn opt3-btn-primary">Registrar</button>
+          <button class="opt3-btn opt3-btn-secondary">Diccionario</button>
+        </div>
+      </div>
+      
+      <div class="opt3-body-map">
+        <div class="opt3-body-map-placeholder">🧘‍♀️</div>
+        <div class="opt3-body-map-text">TAP EN UNA ZONA DEL CUERPO</div>
+      </div>
+      
+      <div style="margin: 0 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <button style="padding: 10px; background: #a23b68; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 0.75rem; cursor: pointer;">Piel</button>
+        <button style="padding: 10px; background: #6fa99b; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 0.75rem; cursor: pointer;">Energía</button>
+        <button style="padding: 10px; background: #d4a574; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 0.75rem; cursor: pointer;">Ciclo</button>
+        <button style="padding: 10px; background: #8b6d73; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 0.75rem; cursor: pointer;">Más zonas</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="description">
+    <h3>💎 Bold Vibrant — Llamativa & Moderna</h3>
+    <p><strong>Características:</strong> Colores más saturados, gradientes vivos, tipografía grande y audaz, UI más geométrica. Se ve moderna y energética. Hay color en todos lados pero organizado.</p>
+    <p><strong>Para quién:</strong> Mujeres que quieren algo llamativo pero sofisticado. Buscan que la app se note, que sea memorable. "Eso sí se ve premium."</p>
+    <p><strong>Vibra:</strong> Moderna, audaz, energética.</p>
+  </div>
+</div>
+
+<div class="vote-section">
+  <h3>¿Cuál te gusta?</h3>
+  <div class="vote-buttons">
+    <button class="vote-btn" onclick="alert('Votaste: Luxury Glass ✨')">✨ Luxury Glass</button>
+    <button class="vote-btn" onclick="alert('Votaste: Warm Minimal 🌸')">🌸 Warm Minimal</button>
+    <button class="vote-btn" onclick="alert('Votaste: Bold Vibrant 💎')">💎 Bold Vibrant</button>
+  </div>
+  <p style="margin-top: 20px; color: #8b6d73; font-size: 0.85rem;">
+    Elige tu favorito y te crearé el código completo + CSS refactorizado para implementar en 1-2 días.
+  </p>
+</div>
+
+<script>
+function showMockup(id) {
+  // Hide all
+  document.querySelectorAll('.mockup-section').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  
+  // Show selected
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
