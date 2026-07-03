@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Generador de Íconos — CÓDIGO CUERPO</title>
+<style>
+  body { font-family: sans-serif; background: #faf5ef; display: flex; flex-direction: column;
+         align-items: center; justify-content: center; min-height: 100vh; margin: 0; gap: 24px; }
+  h2   { color: #c4705a; margin: 0; font-size: 1.4rem; }
+  p    { color: #7a5c4a; margin: 0; font-size: .95rem; text-align: center; max-width: 400px; }
+  .canvases { display: flex; gap: 32px; align-items: flex-end; flex-wrap: wrap; justify-content: center; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .item label { font-size: .85rem; color: #9a7060; font-weight: 600; }
+  canvas { border-radius: 16px; box-shadow: 0 4px 16px rgba(196,112,90,.2); }
+  button { background: #c4705a; color: #fff; border: none; border-radius: 12px;
+           padding: 12px 28px; font-size: 1rem; cursor: pointer; font-weight: 600;
+           box-shadow: 0 4px 12px rgba(196,112,90,.35); transition: background .2s; }
+  button:hover { background: #a85c48; }
+  .note { font-size: .8rem; color: #b09080; }
+</style>
+</head>
+<body>
+
+<h2>🌸 Generador de Íconos</h2>
+<p>Haz clic en el botón para descargar los dos íconos PNG que necesita la app.</p>
+
+<div class="canvases">
+  <div class="item">
+    <label>192 × 192 px</label>
+    <canvas id="c192" width="192" height="192"></canvas>
+  </div>
+  <div class="item">
+    <label>512 × 512 px</label>
+    <canvas id="c512" width="512" height="512"></canvas>
+  </div>
+</div>
+
+<button onclick="downloadBoth()">⬇ Descargar icon-192.png e icon-512.png</button>
+<p class="note">Guárdalos en la misma carpeta que index.html</p>
+
+<script>
+function drawIcon(canvas) {
+  const size = canvas.width;
+  const ctx  = canvas.getContext('2d');
+  const cx   = size / 2;
+  const cy   = size * 0.43; // centro de la flor ligeramente arriba del centro
+  const r    = size * 0.31; // radio del fondo circular
+
+  // ── Fondo redondeado ──
+  const corner = size * 0.195;
+  ctx.beginPath();
+  ctx.moveTo(corner, 0);
+  ctx.lineTo(size - corner, 0);
+  ctx.quadraticCurveTo(size, 0, size, corner);
+  ctx.lineTo(size, size - corner);
+  ctx.quadraticCurveTo(size, size, size - corner, size);
+  ctx.lineTo(corner, size);
+  ctx.quadraticCurveTo(0, size, 0, size - corner);
+  ctx.lineTo(0, corner);
+  ctx.quadraticCurveTo(0, 0, corner, 0);
+  ctx.closePath();
+  ctx.fillStyle = '#faf5ef';
+  ctx.fill();
+
+  // ── Círculo suave de fondo ──
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fillStyle = '#f5e6e0';
+  ctx.fill();
+
+  // ── 8 pétalos ──
+  const petalW = size * 0.055;
+  const petalH = size * 0.107;
+  const petalDist = size * 0.196; // distancia desde cy al centro del pétalo
+
+  for (let i = 0; i < 8; i++) {
+    const angle = (i * 45) * Math.PI / 180;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+    ctx.globalAlpha = 0.75;
+    ctx.beginPath();
+    // pétalo como elipse desplazada hacia arriba
+    ctx.ellipse(0, -petalDist, petalW, petalH, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#e8b4b0';
+    ctx.fill();
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+
+  // ── Centro exterior ──
+  ctx.beginPath();
+  ctx.arc(cx, cy, size * 0.082, 0, Math.PI * 2);
+  ctx.fillStyle = '#c4705a';
+  ctx.fill();
+
+  // ── Centro interior ──
+  ctx.beginPath();
+  ctx.arc(cx, cy, size * 0.055, 0, Math.PI * 2);
+  ctx.fillStyle = '#e8a898';
+  ctx.fill();
+
+  // ── Texto CÓDIGO ──
+  const fs1 = size * 0.082;
+  ctx.font = `700 ${fs1}px Georgia, serif`;
+  ctx.fillStyle = '#c4705a';
+  ctx.textAlign = 'center';
+  ctx.letterSpacing = `${size * 0.004}px`;
+  ctx.fillText('CÓDIGO', cx, cy + size * 0.33);
+
+  // ── Texto cuerpo ──
+  const fs2 = size * 0.074;
+  ctx.font = `italic 400 ${fs2}px Georgia, serif`;
+  ctx.fillStyle = '#a0796a';
+  ctx.fillText('cuerpo', cx, cy + size * 0.41);
+}
+
+// Dibujar ambos al cargar
+drawIcon(document.getElementById('c192'));
+drawIcon(document.getElementById('c512'));
+
+function downloadCanvas(canvas, filename) {
+  const link = document.createElement('a');
+  link.download = filename;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+function downloadBoth() {
+  downloadCanvas(document.getElementById('c192'), 'icon-192.png');
+  setTimeout(() => {
+    downloadCanvas(document.getElementById('c512'), 'icon-512.png');
+  }, 300);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,596 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CÓDIGO CUERPO</title>
+
+<!-- PWA: Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- PWA: iOS (iPhone/iPad) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="CódigoCuerpo">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
+
+<!-- PWA: Android / general -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#c4705a">
+<meta name="description" content="La app que traduce el lenguaje de tu cuerpo">
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ═══════════════════════ ACCESO ═══════════════════════ -->
+<div id="access-screen" class="access-screen hidden">
+  <div class="access-content">
+    <div class="access-logo">
+      <span class="access-brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 18c-4.2-2.2-6.8-5.5-6.8-8.7 0-2.2 1.4-3.8 3.4-3.8 1.4 0 2.6.8 3.4 2 .8-1.2 2-2 3.4-2 2 0 3.4 1.6 3.4 3.8 0 3.2-2.6 6.5-6.8 8.7Z"/><path d="M12 8v10"/><path d="M8.5 12.5c2.2.5 4.8.5 7 0"/></svg></span>
+      <h1 class="access-title">CÓDIGO<br><span>CUERPO</span></h1>
+      <p class="access-subtitle" id="access-subtitle"></p>
+    </div>
+    <div class="access-visual"><img src="body-character-transparent.png" alt=""></div><div class="access-card">
+      <p class="access-prompt" id="access-prompt"></p>
+      <p class="access-hint" id="access-hint"></p>
+      <div class="access-input-row">
+        <input type="text" id="access-code-input"
+          placeholder="Ej: ROSA-1001"
+          autocomplete="off" autocapitalize="characters" spellcheck="false"
+          maxlength="30"
+          onkeydown="if(event.key==='Enter')verifyCode()">
+      </div>
+      <div id="access-error" class="access-error hidden"></div>
+      <button class="btn-primary" onclick="verifyCode()">Activar acceso</button>
+      <p class="access-contact">¿Problemas? Escríbenos y lo resolvemos enseguida </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SPLASH ═══════════════════════ -->
+<div id="splash-screen" class="splash hidden">
+  <div class="splash-content">
+    <div class="splash-logo">
+      <span class="access-brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 18c-4.2-2.2-6.8-5.5-6.8-8.7 0-2.2 1.4-3.8 3.4-3.8 1.4 0 2.6.8 3.4 2 .8-1.2 2-2 3.4-2 2 0 3.4 1.6 3.4 3.8 0 3.2-2.6 6.5-6.8 8.7Z"/><path d="M12 8v10"/><path d="M8.5 12.5c2.2.5 4.8.5 7 0"/></svg></span>
+      <h1 class="splash-title">CÓDIGO<br><span>CUERPO</span></h1>
+      <p class="splash-subtitle">La app que traduce el lenguaje de tu cuerpo</p>
+    </div>
+    <div class="splash-message">
+      <p>Hola, hermosa. Me alegra que estés aquí.</p>
+      <p>Este es un espacio solo para ti, para escuchar lo que tu cuerpo tiene que decir. Sin juicios. Con todo el amor.</p>
+    </div>
+    <div class="splash-name-form">
+      <label for="user-name-input">¿Cómo te llamo, cariño?</label>
+      <input type="text" id="user-name-input" placeholder="Tu nombre..." maxlength="30" autocomplete="off">
+    </div>
+    <button class="btn-primary" onclick="completeSplash()">Empezamos</button>
+    <button class="btn-ghost" onclick="completeSplash()">Entrar sin nombre</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════ APP ═══════════════════════ -->
+<div id="app" class="app hidden">
+
+  <header class="app-header">
+    <span class="header-logo"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 18c-4.2-2.2-6.8-5.5-6.8-8.7 0-2.2 1.4-3.8 3.4-3.8 1.4 0 2.6.8 3.4 2 .8-1.2 2-2 3.4-2 2 0 3.4 1.6 3.4 3.8 0 3.2-2.6 6.5-6.8 8.7Z"/><path d="M12 8v10"/><path d="M8.5 12.5c2.2.5 4.8.5 7 0"/></svg></span> CÓDIGO CUERPO</span>
+    <span id="header-greeting" class="header-greeting"></span>
+    <button class="header-logout-btn" onclick="logOut()" title="Cerrar sesión" aria-label="Cerrar sesión"><span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span></button>
+  </header>
+
+  <main class="app-main">
+
+    <!-- ── PANTALLA: HOY ── -->
+    <section id="screen-home" class="screen active home-screen-v2">
+      <div class="home-hero-v2">
+        <div class="home-hero-copy">
+          <div class="home-hero-topline">BIODESCODIFICACIÓN · CUERPO</div>
+          <h2>Hola, <span id="home-name">hermosa</span></h2>
+          <p>Registra una señal corporal, descubre el patrón emocional y vuelve a tu centro con una práctica guiada.</p>
+        </div>
+        <div class="home-hero-character" aria-hidden="true"><img src="body-character-transparent.png" alt=""></div>
+        <div class="home-hero-actions">
+          <button class="btn-primary" onclick="document.getElementById('body-map')?.scrollIntoView({behavior:'smooth',block:'center'})">
+            <span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7Z"/></svg></span> Registrar señal
+          </button>
+          <button class="btn-ghost" onclick="openDictionary()">Explorar diccionario</button>
+        </div>
+      </div>
+
+      <div class="home-stats-v2">
+        <div class="home-stat-card"><strong id="home-today-count">0</strong><span>Hoy</span></div>
+        <div class="home-stat-card"><strong id="home-total-count">0</strong><span>Registros</span></div>
+        <div class="home-stat-card"><strong id="home-challenge-pct">0%</strong><span>Reto</span></div>
+      </div>
+
+      <div class="home-daily-card">
+        <div class="home-daily-head">
+          <span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c4 4 7 7 7 11a7 7 0 0 1-14 0c0-4 3-7 7-11Z"/><path d="M8.5 14c2.5 1.6 4.5 1.6 7 0"/></svg></span>
+          <div>
+            <h3>Tu guía de hoy</h3>
+            <p id="home-daily-subtitle">Una recomendación según tu registro más reciente.</p>
+          </div>
+        </div>
+        <div class="home-recommend-box">
+          <strong id="home-rec-title">Escucha tu cuerpo</strong>
+          <p id="home-rec-text">Registra una señal para recibir una práctica sugerida.</p>
+          <button id="home-rec-action" class="btn-ghost btn-small" onclick="runDailyRecommendation()">Registrar señal</button>
+        </div>
+        <div class="quick-checkin">
+          <span>Check-in rápido</span>
+          <div class="quick-checkin-grid">
+            <button data-checkin="calma" onclick="saveQuickCheckin('calma', this)">Calma</button>
+            <button data-checkin="tension" onclick="saveQuickCheckin('tension', this)">Tensión</button>
+            <button data-checkin="cansancio" onclick="saveQuickCheckin('cansancio', this)">Cansancio</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-tools-v2">
+        <div class="section-row-title"><h3>Tus herramientas</h3><button onclick="showScreen('records')">Ver todo</button></div>
+        <div class="home-tool-grid">
+          <button class="home-tool-card tool-diary" onclick="showScreen('diary')"><span class="premium-static-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 5h10a2 2 0 0 1 2 2v12H8a3 3 0 0 1-3-3V7a2 2 0 0 1 2-2Z"/><path d="M8 5v14"/><path d="M11 9h5M11 13h4"/></svg></span><strong>Diario</strong><small>Preguntas guiadas</small></button>
+          <button class="home-tool-card tool-reto" onclick="showScreen('challenge')"><span class="premium-static-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/><path d="M4 19h16"/></svg></span><strong>Reto</strong><small>7 días de práctica</small></button>
+          <button class="home-tool-card tool-calm" onclick="showScreen('meditations')"><span class="premium-static-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4c4 3 6 6 6 10a6 6 0 0 1-12 0c0-4 2-7 6-10Z"/><path d="M9 14c2 1 4 1 6 0"/></svg></span><strong>Calma</strong><small>Meditación y tapping</small></button>
+          <button class="home-tool-card tool-records" onclick="showScreen('records')"><span class="premium-static-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><strong>Patrones</strong><small>Historial y gráficos</small></button>
+        </div>
+      </div>
+
+      <div class="body-section-heading">
+        <h3>Mapa corporal</h3>
+        <p>Elige una zona para iniciar el registro.</p>
+      </div>
+
+      <div class="body-map-container">
+        <div class="body-map-wrapper">
+          <div id="body-map" class="body-character-map" aria-label="Mapa corporal interactivo">
+            <img class="body-character-img" src="body-character-transparent.png" alt="Personaje femenino para seleccionar zonas del cuerpo">
+            <button class="body-zone-hotspot zone-head" data-zone="head" onclick="selectBodyZone('head','Cabeza')"><span>Cabeza</span></button>
+            <button class="body-zone-hotspot zone-throat" data-zone="throat" onclick="selectBodyZone('throat','Garganta y cuello')"><span>Garganta</span></button>
+            <button class="body-zone-hotspot zone-chest" data-zone="chest" onclick="selectBodyZone('chest','Pecho y corazón')"><span>Pecho</span></button>
+            <button class="body-zone-hotspot zone-shoulders zone-shoulders-left" data-zone="shoulders" onclick="selectBodyZone('shoulders','Hombros y espalda alta')"><span>Hombro</span></button>
+            <button class="body-zone-hotspot zone-shoulders zone-shoulders-right" data-zone="shoulders" onclick="selectBodyZone('shoulders','Hombros y espalda alta')"><span>Hombro</span></button>
+            <button class="body-zone-hotspot zone-belly" data-zone="belly" onclick="selectBodyZone('belly','Vientre y digestivo')"><span>Vientre</span></button>
+            <button class="body-zone-hotspot zone-lumbar" data-zone="lumbar" onclick="selectBodyZone('lumbar','Espalda lumbar')"><span>Lumbar</span></button>
+            <button class="body-zone-hotspot zone-pelvis" data-zone="pelvis" onclick="selectBodyZone('pelvis','Pelvis y útero')"><span>Pelvis</span></button>
+            <button class="body-zone-hotspot zone-hips zone-hips-left" data-zone="hips" onclick="selectBodyZone('hips','Caderas')"><span>Cadera</span></button>
+            <button class="body-zone-hotspot zone-hips zone-hips-right" data-zone="hips" onclick="selectBodyZone('hips','Caderas')"><span>Cadera</span></button>
+            <button class="body-zone-hotspot zone-legs zone-legs-left" data-zone="legs" onclick="selectBodyZone('legs','Piernas y rodillas')"><span>Pierna</span></button>
+            <button class="body-zone-hotspot zone-legs zone-legs-right" data-zone="legs" onclick="selectBodyZone('legs','Piernas y rodillas')"><span>Pierna</span></button>
+          </div>
+
+          <!-- Pills extra para zonas skin/energy/cycle -->
+          <div class="extra-zones">
+            <button class="extra-zone-btn" onclick="selectBodyZone('skin','Piel')"><span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.2L20 10l-5.2 2.2L12 18l-2.2-5.8L4 10l5.8-1.8L12 3Z"/></svg></span> Piel</button>
+            <button class="extra-zone-btn" onclick="selectBodyZone('energy','Energía y sueño')"><span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 3a8 8 0 1 0 5 13 7 7 0 0 1-5-13Z"/></svg></span> Energía</button>
+            <button class="extra-zone-btn" onclick="selectBodyZone('cycle','Ciclo femenino')"><span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4a8 8 0 1 1-7.4 5"/><path d="M4 4v5h5"/><path d="M12 8v4l3 2"/></svg></span> Ciclo</button>
+          </div>
+          <!-- Acceso al diccionario -->
+          <button class="dict-home-btn" onclick="openDictionary()">
+            <span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h7a4 4 0 0 1 4 4v10H9a4 4 0 0 0-4 4V5Z"/><path d="M16 7h3v12h-3"/><path d="M8 9h4M8 13h4"/></svg></span>
+            <span>Diccionario del Cuerpo · 60 señales</span>
+            <span class="dict-home-arrow">→</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="selected-zone-banner" class="selected-zone-banner hidden">
+        <span id="sz-icon" class="zone-line-icon">◎</span>
+        <span id="sz-text">Zona seleccionada</span>
+        <button class="btn-xs-outline" onclick="clearZone()">✕</button>
+      </div>
+      <div id="recent-hint" class="recent-hint hidden">
+        <button class="btn-ghost btn-small" onclick="showScreen('records')">Ver mis registros →</button>
+      </div>
+    </section>
+
+    <!-- ── PANTALLA: DIARIO ── -->
+    <section id="screen-diary" class="screen">
+      <div class="screen-header">
+        <h2>Diario Emocional</h2>
+        <p>Ejercicios guiados del libro</p>
+      </div>
+      <div class="diary-intro-card">
+        <p>Cariño, estos ejercicios están diseñados para que tengas una conversación contigo misma, no para rellenar un formulario. Tómate tu tiempo. No hay respuestas correctas o incorrectas.</p>
+      </div>
+      <div class="diary-exercises-list" id="diary-list"></div>
+    </section>
+
+    <!-- ── PANTALLA: RETO 7 DÍAS ── -->
+    <section id="screen-challenge" class="screen">
+      <div class="screen-header">
+        <h2>Reto 7 Días <span id="challenge-round-badge" style="font-size:.7em;color:var(--terracota);font-weight:400"></span></h2>
+        <p>La rutina del libro, un día a la vez</p>
+      </div>
+      <div id="challenge-progress-bar" class="challenge-progress-bar">
+        <div id="challenge-fill" class="challenge-fill"></div>
+      </div>
+      <div id="challenge-days-list" class="challenge-days-list"></div>
+      <div style="text-align:center;padding:12px 0 24px">
+        <button class="btn-ghost btn-small reset-reto-btn" onclick="resetChallenge()"><span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v6h-6"/></svg></span> Reiniciar reto</button>
+      </div>
+    </section>
+
+    <!-- ── PANTALLA: RE-CONECT ── -->
+    <section id="screen-reconect" class="screen">
+      <div class="screen-header">
+        <h2>Método RE-CONECT</h2>
+        <p>El corazón del libro, paso a paso</p>
+      </div>
+      <div class="reconect-intro-card">
+        <div class="reconect-intro-icon"><span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c4 4 7 7 7 11a7 7 0 0 1-14 0c0-4 3-7 7-11Z"/><path d="M8.5 14c2.5 1.6 4.5 1.6 7 0"/></svg></span></div>
+        <h3>5 pasos para escuchar tu señal</h3>
+        <p>Este método te guía desde la señal física hasta la acción de reparación. Al final, guardarás un "Mapa completado" en tu historial.</p>
+        <button class="btn-primary" onclick="openReconect()">Comenzar ahora</button>
+      </div>
+      <div class="reconect-sessions-list" id="reconect-sessions-list">
+        <h4 class="section-mini-title">Mapas completados</h4>
+        <div id="reconect-history"></div>
+      </div>
+    </section>
+
+    <!-- ── PANTALLA: MEDITACIONES ── -->
+    <section id="screen-meditations" class="screen">
+      <div class="screen-header">
+        <h2>Meditaciones y Tapping</h2>
+        <p>Prácticas guiadas del libro</p>
+      </div>
+      <div class="meditations-list" id="meditations-list"></div>
+    </section>
+
+    <!-- ── PANTALLA: REGISTROS ── -->
+    <section id="screen-records" class="screen">
+      <div class="screen-header">
+        <h2>Mis Registros</h2>
+        <p>Tu diario del cuerpo</p>
+      </div>
+      <div class="records-tabs">
+        <button class="records-tab active" onclick="switchRecordsTab('timeline',this)">Señales</button>
+        <button class="records-tab" onclick="switchRecordsTab('diary',this)">Mi diario</button>
+        <button class="records-tab" onclick="switchRecordsTab('patterns',this)">Patrones</button>
+        <button class="records-tab" onclick="switchRecordsTab('charts',this)">Gráficos</button>
+      </div>
+      <div id="records-timeline" class="records-pane active"></div>
+      <div id="records-diary" class="records-pane"></div>
+      <div id="records-patterns" class="records-pane"></div>
+      <div id="records-charts" class="records-pane"></div>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav" aria-label="Navegación principal">
+    <button class="nav-item active" id="nav-home" onclick="showScreen('home')" aria-label="Ir a Hoy"><span class="nav-icon premium-nav-icon"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M7 10v10h10V10"/></svg></span><span class="nav-label">Hoy</span></button>
+    <button class="nav-item" id="nav-diary" onclick="showScreen('diary')" aria-label="Ir a Diario">
+      <span class="nav-icon premium-nav-icon"><svg viewBox="0 0 24 24"><path d="M7 5h10v14H7z"/><path d="M10 9h4M10 13h4"/></svg></span><span class="nav-label">Diario</span>
+    </button>
+    <button class="nav-item" id="nav-challenge" onclick="showScreen('challenge')" aria-label="Ir a Reto">
+      <span class="nav-icon premium-nav-icon"><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/><path d="M4 19h16"/></svg></span><span class="nav-label">Reto</span>
+    </button>
+    <button class="nav-item" id="nav-reconect" onclick="showScreen('reconect')" aria-label="Ir a RE-CONECT">
+      <span class="nav-icon premium-nav-icon"><svg viewBox="0 0 24 24"><path d="M12 3c4 4 7 7 7 11a7 7 0 0 1-14 0c0-4 3-7 7-11Z"/></svg></span><span class="nav-label">RE-CONECT</span>
+    </button>
+    <button class="nav-item" id="nav-meditations" onclick="showScreen('meditations')" aria-label="Ir a Calma">
+      <span class="nav-icon premium-nav-icon"><svg viewBox="0 0 24 24"><path d="M12 4c4 3 6 6 6 10a6 6 0 0 1-12 0c0-4 2-7 6-10Z"/></svg></span><span class="nav-label">Calma</span>
+    </button>
+    <button class="nav-item" id="nav-records" onclick="showScreen('records')" aria-label="Ir a Registros">
+      <span class="nav-icon premium-nav-icon"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><span class="nav-label">Registros</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ═══════════════════════ MODALES ═══════════════════════ -->
+
+<!-- MODAL: REGISTRO RÁPIDO -->
+<div id="modal-register" class="modal-overlay hidden" onclick="overlayClose(event,'modal-register')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-zone-badge">
+        <span id="mreg-zone-icon">◎</span>
+        <h3 id="mreg-zone-title">Zona</h3>
+      </div>
+      <button class="modal-close-btn" onclick="closeModal('modal-register')">✕</button>
+    </div>
+    <div class="modal-progress-dots">
+      <span class="mdot active" id="md1"></span>
+      <span class="mdot" id="md2"></span>
+      <span class="mdot" id="md3"></span>
+      <span class="mdot" id="md4"></span>
+    </div>
+    <div class="modal-body" id="mreg-body">
+
+      <!-- Paso 1: Sensación / Condición -->
+      <div id="step-sensation" class="mstep active">
+        <p class="step-q" id="step-sensation-q">¿Qué tipo de sensación sientes?</p>
+        <div class="sensation-grid" id="sensation-grid"></div>
+        <div class="step-nav">
+          <button class="btn-primary step-next" id="btn-s1" disabled onclick="goStep('intensity')">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- Paso 2: Intensidad -->
+      <div id="step-intensity" class="mstep">
+        <p class="step-q">¿Cuánto te afecta?</p>
+        <div class="intensity-row">
+          <div class="int-btn" data-v="1" onclick="pickIntensity(1,this)"><div class="int-circle c1">1</div><span>Leve</span></div>
+          <div class="int-btn" data-v="2" onclick="pickIntensity(2,this)"><div class="int-circle c2">2</div><span>Poco</span></div>
+          <div class="int-btn" data-v="3" onclick="pickIntensity(3,this)"><div class="int-circle c3">3</div><span>Medio</span></div>
+          <div class="int-btn" data-v="4" onclick="pickIntensity(4,this)"><div class="int-circle c4">4</div><span>Fuerte</span></div>
+          <div class="int-btn" data-v="5" onclick="pickIntensity(5,this)"><div class="int-circle c5">5</div><span>Mucho</span></div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-ghost step-back" onclick="goStep('sensation')">← Volver</button>
+          <button class="btn-primary step-next" id="btn-s2" disabled onclick="goStep('emotion')">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- Paso 3: Emoción -->
+      <div id="step-emotion" class="mstep">
+        <p class="step-q">¿Qué emoción sientes ahora?</p>
+        <p class="step-hint">Toca la que más resuene contigo</p>
+        <div class="emotion-wheel" id="emotion-wheel"></div>
+        <div id="sub-emotions-area" class="sub-emotions-area hidden">
+          <p class="sub-label">¿Más específicamente?</p>
+          <div id="sub-emotions-grid" class="sub-emotions-grid"></div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-ghost step-back" onclick="goStep('intensity')">← Volver</button>
+          <button class="btn-primary step-next" id="btn-s3" disabled onclick="goStep('context')">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- Paso 4: Contexto -->
+      <div id="step-context" class="mstep">
+        <p class="step-q">¿Qué pasó antes? <span class="optional">(opcional)</span></p>
+        <div class="context-chips" id="context-chips"></div>
+        <textarea class="ctx-textarea" id="ctx-note" placeholder="O cuéntame en tus palabras... ✍️" rows="3" maxlength="400"></textarea>
+        <div class="step-nav">
+          <button class="btn-ghost step-back" onclick="goStep('emotion')">← Volver</button>
+          <button class="btn-primary" onclick="saveEntry()">Guardar y ver mensaje</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: RESULTADO -->
+<div id="modal-result" class="modal-overlay hidden" onclick="overlayClose(event,'modal-result')">
+  <div class="modal-box modal-result-box">
+    <div class="result-header">
+      <div class="result-zone-circle" id="res-zone-icon">◎</div>
+      <h3 id="res-zone-name">Tu señal</h3>
+      <button class="modal-close-btn" onclick="closeModal('modal-result')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="result-message-card">
+        <span class="result-quote">❝</span>
+        <p id="res-message" class="res-message-text"></p>
+      </div>
+      <div class="result-reflections" id="res-reflections"></div>
+      <div class="result-repairs">
+        <h5>Sugerencias de reparación</h5>
+        <div class="repair-card repair-1"><div class="repair-badge rb1">Nivel 1 · Corporal</div><p id="rep1"></p></div>
+        <div class="repair-card repair-2"><div class="repair-badge rb2">Nivel 2 · Emocional</div><p id="rep2"></p></div>
+        <div class="repair-card repair-3"><div class="repair-badge rb3">Nivel 3 · Vida real</div><p id="rep3"></p></div>
+      </div>
+      <div id="intensity-warning" class="intensity-warning hidden">
+        <p> Cariño, esto que sientes es importante. Además de escuchar tu cuerpo, ¿has consultado con un profesional de la salud? Este espacio te acompaña, pero no reemplaza la medicina.</p>
+      </div>
+      <div class="result-actions">
+        <button class="btn-primary" onclick="closeModal('modal-result')">Listo, gracias</button>
+        <button class="btn-ghost" onclick="closeModal('modal-result');showScreen('records')">Ver mis registros</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DIARIO (ejercicio guiado) -->
+<div id="modal-diary" class="modal-overlay hidden" onclick="overlayClose(event,'modal-diary')">
+  <div class="modal-box modal-diary-box">
+    <div class="modal-header">
+      <div class="diary-modal-badge">
+        <span id="dm-icon">≡</span>
+        <div><h3 id="dm-title">Ejercicio</h3><p id="dm-subtitle"></p></div>
+      </div>
+      <button class="modal-close-btn" onclick="closeModal('modal-diary')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="dm-intro" class="diary-intro-text"></p>
+      <div id="dm-steps" class="diary-steps"></div>
+      <div class="diary-step-nav">
+        <span id="dm-progress" class="diary-progress-text"></span>
+        <div>
+          <button class="btn-ghost btn-small" id="dm-prev" onclick="diaryPrev()">← Anterior</button>
+          <button class="btn-primary btn-small" id="dm-next" onclick="diaryNext()">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: RE-CONECT (5 pasos) -->
+<div id="modal-reconect" class="modal-overlay hidden" onclick="overlayClose(event,'modal-reconect')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 class="reconect-modal-title"><span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c4 4 7 7 7 11a7 7 0 0 1-14 0c0-4 3-7 7-11Z"/><path d="M8.5 14c2.5 1.6 4.5 1.6 7 0"/></svg></span> Método RE-CONECT</h3>
+      <button class="modal-close-btn" onclick="closeModal('modal-reconect')">✕</button>
+    </div>
+    <div class="reconect-steps-bar">
+      <div class="rs-dot active" id="rsd1" title="Nombrar"></div>
+      <div class="rs-line"></div>
+      <div class="rs-dot" id="rsd2" title="Contexto"></div>
+      <div class="rs-line"></div>
+      <div class="rs-dot" id="rsd3" title="Emoción"></div>
+      <div class="rs-line"></div>
+      <div class="rs-dot" id="rsd4" title="Necesidad"></div>
+      <div class="rs-line"></div>
+      <div class="rs-dot" id="rsd5" title="Reparación"></div>
+    </div>
+    <div class="reconect-step-labels">
+      <span>Nombrar</span><span>Contexto</span><span>Emoción</span><span>Necesidad</span><span>Reparación</span>
+    </div>
+    <div class="modal-body" id="reconect-body">
+
+      <!-- Paso R1: Nombrar la señal -->
+      <div id="rstep-1" class="rstep active">
+        <h4 class="rstep-title">Paso 1 — Nombra la señal</h4>
+        <p class="rstep-hint">Toca la zona en el mapa o escoge de la lista</p>
+        <div class="r-zone-pills" id="r-zone-pills"></div>
+        <p class="step-q" style="margin-top:14px">¿Qué tipo de sensación?</p>
+        <div class="r-sensation-pills" id="r-sensation-pills"></div>
+        <p class="step-q" style="margin-top:14px">¿Desde cuándo está ahí?</p>
+        <div class="r-time-pills">
+          <button class="ctx-chip" onclick="pickRTime('Unas horas',this)">Unas horas</button>
+          <button class="ctx-chip" onclick="pickRTime('Unos días',this)">Unos días</button>
+          <button class="ctx-chip" onclick="pickRTime('Semanas',this)">Semanas</button>
+          <button class="ctx-chip" onclick="pickRTime('Meses',this)">Meses</button>
+          <button class="ctx-chip" onclick="pickRTime('Años',this)">Años</button>
+        </div>
+        <div class="rstep-nav">
+          <button class="btn-primary" onclick="goRStep(2)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- Paso R2: Contexto -->
+      <div id="rstep-2" class="rstep">
+        <h4 class="rstep-title">Paso 2 — Contexto</h4>
+        <div class="r-chat" id="r-chat">
+          <div class="r-chat-q">¿Recuerdas la primera vez que sentiste esto?</div>
+          <textarea class="ctx-textarea" id="r-q1" placeholder="Escribe aquí..." rows="2" maxlength="500"></textarea>
+          <div class="r-chat-q">¿Qué estaba pasando en tu vida en ese momento?</div>
+          <textarea class="ctx-textarea" id="r-q2" placeholder="Escribe aquí..." rows="2" maxlength="500"></textarea>
+          <div class="r-chat-q">¿En qué situaciones suele aparecer esta señal?</div>
+          <textarea class="ctx-textarea" id="r-q3" placeholder="Escribe aquí..." rows="2" maxlength="500"></textarea>
+          <div class="r-chat-q">¿Qué pasó justo antes de esta vez?</div>
+          <textarea class="ctx-textarea" id="r-q4" placeholder="Escribe aquí..." rows="2" maxlength="500"></textarea>
+        </div>
+        <div class="rstep-nav">
+          <button class="btn-ghost" onclick="goRStep(1)">← Volver</button>
+          <button class="btn-primary" onclick="goRStep(3)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- Paso R3: Emoción -->
+      <div id="rstep-3" class="rstep">
+        <h4 class="rstep-title">Paso 3 — La emoción</h4>
+        <p class="rstep-hint">¿Cuál es la emoción principal que acompaña a esta señal?</p>
+        <div class="emotion-wheel" id="r-emotion-wheel"></div>
+        <div id="r-sub-emotions-area" class="sub-emotions-area hidden">
+          <p class="sub-label">¿Y debajo? (emoción raíz)</p>
+          <div id="r-sub-emotions-grid" class="sub-emotions-grid"></div>
+        </div>
+        <div class="rstep-nav">
+          <button class="btn-ghost" onclick="goRStep(2)">← Volver</button>
+          <button class="btn-primary" id="r-btn-s3" disabled onclick="goRStep(4)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- Paso R4: Necesidad -->
+      <div id="rstep-4" class="rstep">
+        <h4 class="rstep-title">Paso 4 — La necesidad</h4>
+        <p class="rstep-hint">Basándome en tu emoción, esto es lo que parece necesitar:</p>
+        <div id="r-needs-container" class="r-needs-container"></div>
+        <p class="step-q" style="margin-top:14px">¿Cuál resuena más contigo?</p>
+        <textarea class="ctx-textarea" id="r-need-note" placeholder="O escribe tu propia necesidad..." rows="2" maxlength="300"></textarea>
+        <div class="rstep-nav">
+          <button class="btn-ghost" onclick="goRStep(3)">← Volver</button>
+          <button class="btn-primary" onclick="goRStep(5)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- Paso R5: Reparación -->
+      <div id="rstep-5" class="rstep">
+        <h4 class="rstep-title">Paso 5 — La reparación</h4>
+        <div id="r-repairs-container" class="r-repairs-container"></div>
+        <p class="step-q" style="margin-top:14px">¿Qué reparación eliges?</p>
+        <textarea class="ctx-textarea" id="r-repair-note" placeholder="Escribe aquí tu compromiso de reparación..." rows="2" maxlength="300"></textarea>
+        <div class="rstep-nav">
+          <button class="btn-ghost" onclick="goRStep(4)">← Volver</button>
+          <button class="btn-primary" onclick="saveReconect()">Guardar mapa completo</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: MEDITACIÓN (reproductor) -->
+<div id="modal-meditation" class="modal-overlay hidden" onclick="overlayClose(event,'modal-meditation')">
+  <div class="modal-box modal-meditation-box">
+    <div class="meditation-player-header">
+      <span id="med-icon" class="med-big-icon">◌</span>
+      <div>
+        <h3 id="med-title">Meditación</h3>
+        <p id="med-duration" class="med-duration"></p>
+      </div>
+      <button class="modal-close-btn" onclick="closeModal('modal-meditation');stopMedTimer()">✕</button>
+    </div>
+    <!-- Controles de voz -->
+    <div class="med-controls-section">
+      <div class="med-voice-toggle" onclick="toggleVoiceGuide(this)" id="med-voice-toggle">
+        <span class="med-voice-icon" id="med-voice-icon">🔊</span>
+        <span id="med-voice-label">Leer en voz alta: ON</span>
+        <span class="med-voice-status on" id="med-voice-status"></span>
+      </div>
+      <div class="med-speaking-indicator hidden" id="med-speaking-indicator">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="med-timer-controls">
+        <button class="med-ctrl-btn" id="med-timer-play" onclick="startMedTimer()">▶ Iniciar práctica</button>
+        <button class="med-ctrl-btn med-ctrl-pause hidden" id="med-timer-pause" onclick="pauseMedTimer()">⏸ Pausa</button>
+        <button class="med-ctrl-btn med-ctrl-stop" onclick="stopMedTimer()">⏹ Detener</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <p id="med-description" class="med-description"></p>
+      <div class="med-script-box">
+        <div class="med-script-header">
+          <span class="med-script-label"><span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4h10v16H7z"/><path d="M10 8h4M10 12h4M10 16h2"/></svg></span> Guión de la práctica</span>
+        </div>
+        <div id="med-script" class="med-script-text"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DICCIONARIO DEL CUERPO -->
+<div id="modal-dictionary" class="modal-overlay hidden" onclick="overlayClose(event,'modal-dictionary')">
+  <div class="modal-box dict-modal-box">
+    <div class="modal-header dict-modal-header">
+      <div>
+        <h3 class="dict-modal-title"><span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h7a4 4 0 0 1 4 4v10H9a4 4 0 0 0-4 4V5Z"/><path d="M16 7h3v12h-3"/><path d="M8 9h4M8 13h4"/></svg></span> Diccionario del Cuerpo</h3>
+        <p class="dict-modal-subtitle">60 señales y su mensaje simbólico</p>
+      </div>
+      <button class="modal-close-btn" onclick="closeModal('modal-dictionary')">✕</button>
+    </div>
+    <div class="dict-search-wrap">
+      <input type="search" id="dict-search" class="dict-search-input"
+        placeholder="🔍 Buscar señal, zona, emoción..."
+        oninput="searchDictionary(this.value)"
+        autocomplete="off" autocorrect="off" spellcheck="false">
+    </div>
+    <div id="dict-list" class="dict-list"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
