@@ -25,6 +25,7 @@
 
 <!-- ESTILOS -->
 <link rel="stylesheet" id="style-sheet" href="styles-premium.css">
+<link rel="stylesheet" href="styles-premium-v3.css">
 
 <style>
   .style-switcher {
@@ -43,7 +44,6 @@
     gap: 8px;
     align-items: center;
   }
-  
   .style-switcher label {
     font-size: 0.75rem;
     font-weight: 700;
@@ -52,7 +52,6 @@
     letter-spacing: 0.08em;
     margin: 0;
   }
-  
   .style-switcher select {
     padding: 6px 10px;
     border-radius: 8px;
@@ -63,13 +62,11 @@
     font-size: 0.8rem;
     cursor: pointer;
   }
-  
   .style-switcher select:focus {
     outline: none;
     border-color: #a23b68;
     box-shadow: 0 0 0 3px rgba(162, 59, 104, 0.1);
   }
-  
   @media (max-width: 480px) {
     .style-switcher {
       top: 10px;
@@ -160,7 +157,6 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(e => console.log('SW:', e));
 }
 
-// Estado global
 const S = {
   user: { name: '', code: '' }
 };
@@ -182,12 +178,10 @@ function initApp() {
 function verifyCode() {
   const code = document.getElementById('access-code-input').value.trim().toUpperCase();
   const name = document.getElementById('user-name-input').value.trim() || 'hermosa';
-  
   if (!code) {
     alert('Por favor introduce tu código');
     return;
   }
-  
   S.user = { code, name };
   localStorage.setItem('cc_user', JSON.stringify(S.user));
   showSplash();
@@ -230,7 +224,6 @@ function switchStyle(css) {
   localStorage.setItem('cc_style', css);
 }
 
-// Al cargar
 document.addEventListener('DOMContentLoaded', () => {
   initApp();
   const savedStyle = localStorage.getItem('cc_style') || 'styles-premium.css';
