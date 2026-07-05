@@ -22,9 +22,74 @@
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+
+<!-- ESTILOS -->
+<link rel="stylesheet" id="style-sheet" href="styles-premium.css">
+
+<style>
+  .style-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.88);
+    border-radius: 50px;
+    padding: 12px 16px;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .style-switcher label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #8b6d73;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0;
+  }
+  
+  .style-switcher select {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #e8d5d5;
+    background: white;
+    color: #a23b68;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  
+  .style-switcher select:focus {
+    outline: none;
+    border-color: #a23b68;
+    box-shadow: 0 0 0 3px rgba(162, 59, 104, 0.1);
+  }
+  
+  @media (max-width: 480px) {
+    .style-switcher {
+      top: 10px;
+      right: 10px;
+      padding: 8px 12px;
+      font-size: 0.7rem;
+    }
+  }
+</style>
 </head>
 <body>
+
+<!-- SELECTOR DE ESTILOS -->
+<div class="style-switcher">
+  <label for="style-select">Diseño:</label>
+  <select id="style-select" onchange="switchStyle(this.value)">
+    <option value="styles-premium.css">✨ Luxury Glass (Premium)</option>
+    <option value="styles.css">🌸 Original</option>
+  </select>
+</div>
 
 <!-- ═══════════════════════ ACCESO ═══════════════════════ -->
 <div id="access-screen" class="access-screen hidden">
@@ -34,7 +99,8 @@
       <h1 class="access-title">CÓDIGO<br><span>CUERPO</span></h1>
       <p class="access-subtitle" id="access-subtitle"></p>
     </div>
-    <div class="access-visual"><img src="body-character-transparent.png" alt=""></div><div class="access-card">
+    <div class="access-visual"><img src="body-character-transparent.png" alt=""></div>
+    <div class="access-card">
       <p class="access-prompt" id="access-prompt"></p>
       <p class="access-hint" id="access-hint"></p>
       <div class="access-input-row">
@@ -46,7 +112,7 @@
       </div>
       <div id="access-error" class="access-error hidden"></div>
       <button class="btn-primary" onclick="verifyCode()">Activar acceso</button>
-      <p class="access-contact">¿Problemas? Escríbenos y lo resolvemos enseguida </p>
+      <p class="access-contact">¿Problemas? Escríbenos y lo resolvemos enseguida</p>
     </div>
   </div>
 </div>
@@ -76,36 +142,30 @@
 <div id="app" class="app hidden">
 
   <header class="app-header">
-    <span class="header-logo"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 18c-4.2-2.2-6.8-5.5-6.8-8.7 0-2.2 1.4-3.8 3.4-3.8 1.4 0 2.6.8 3.4 2 .8-1.2 2-2 3.4-2 2 0 3.4 1.6 3.4 3.8 0 3.2-2.6 6.5-6.8 8.7" fill="currentColor"/></svg></span></span>
+    <span class="header-logo"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 18c-4.2-2.2-6.8-5.5-6.8-8.7 0-2.2 1.4-3.8 3.4-3.8 1.4 0 2.6.8 3.4 2 .8-1.2 2-2 3.4-2 2 0 3.4 1.6 3.4 3.8 0 3.2-2.6 6.5-6.8 8.7" fill="currentColor"/></svg></span>CÓDIGO CUERPO</span>
     <span id="header-greeting" class="header-greeting"></span>
     <button class="header-logout-btn" onclick="logOut()" title="Cerrar sesión" aria-label="Cerrar sesión"><span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5z" fill="currentColor"/></svg></span></button>
   </header>
 
   <main class="app-main">
-
-    <!-- ── PANTALLA: HOY ── -->
-    <section id="screen-home" class="screen active home-screen-v2">
-      <div class="home-hero-v2">
-        <div class="home-hero-copy">
-          <div class="home-hero-topline">BIODESCODIFICACIÓN · CUERPO</div>
-          <h2>Hola, <span id="home-name">hermosa</span></h2>
-          <p>Registra una señal corporal, descubre el patrón emocional y vuelve a tu centro con una práctica guiada.</p>
-        </div>
-        <div class="home-hero-character" aria-hidden="true"><img src="body-character-transparent.png" alt=""></div>
-        <div class="home-hero-actions">
-          <button class="btn-primary" onclick="document.getElementById('body-map')?.scrollIntoView({behavior:'smooth',block:'center'})">
-            <span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7Z" fill="currentColor"/></svg></span> Registrar señal
-          </button>
-          <button class="btn-ghost" onclick="openDictionary()">Explorar diccionario</button>
-        </div>
-      </div>
-      <div id="body-map" class="body-map-container"></div>
-    </section>
-
+    <section id="screen-home" class="screen active home-screen-v2"></section>
   </main>
 
 </div>
 
+<script src="data.js"></script>
 <script src="app.js"></script>
+<script src="sw.js"></script>
+<script>
+function switchStyle(file) {
+  document.getElementById('style-sheet').href = file;
+  localStorage.setItem('cc_style', file);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('cc_style') || 'styles-premium.css';
+  document.getElementById('style-sheet').href = saved;
+  document.getElementById('style-select').value = saved;
+});
+</script>
 </body>
 </html>
