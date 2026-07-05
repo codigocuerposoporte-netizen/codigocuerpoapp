@@ -1,0 +1,169 @@
+/* v3 visual refinements (safe override, keeps old styles intact) */
+:root {
+  --radius-pill: 999px;
+  --blur-xl: blur(30px);
+}
+
+/* Improve readability and rhythm */
+body {
+  line-height: 1.45;
+}
+
+.app-main {
+  padding-bottom: 118px;
+}
+
+/* Header polish */
+.app-header {
+  top: 8px;
+  margin: 8px 12px 2px;
+  border-radius: 18px;
+}
+
+.header-logo {
+  letter-spacing: 0.2px;
+}
+
+/* Hero spacing + balance */
+.home-hero-v2 {
+  margin: 14px 16px 14px;
+  padding: 22px 18px 20px;
+  min-height: 200px;
+}
+
+.home-hero-v2 h2 {
+  font-size: 2.1rem;
+  max-width: 250px;
+}
+
+.home-hero-v2 p {
+  font-size: 0.9rem;
+}
+
+.home-hero-actions .btn-primary,
+.home-hero-actions .btn-ghost {
+  min-height: 48px;
+  font-weight: 700;
+}
+
+/* Stats and cards */
+.home-stats-v2 {
+  margin: 0 16px 18px;
+  gap: 8px;
+}
+
+.home-stat-card {
+  border-radius: 12px;
+  padding: 10px 8px;
+}
+
+/* Body map wrapper breathing room */
+.body-map-container {
+  padding: 0 16px 0;
+}
+
+.body-map-wrapper {
+  padding: 14px 12px 16px;
+  border-radius: 18px;
+}
+
+.body-character-map {
+  width: min(100%, 320px);
+  height: 505px;
+}
+
+.body-character-img {
+  height: 484px;
+}
+
+/* Buttons consistency */
+.btn-primary,
+.btn-ghost {
+  border-radius: 14px;
+}
+
+.btn-primary {
+  padding: 13px 22px;
+}
+
+.btn-ghost {
+  padding: 11px 18px;
+}
+
+.btn-small {
+  min-height: 40px;
+  font-size: 0.8rem;
+}
+
+/* Modal refinement */
+.modal-box {
+  max-height: 90vh;
+}
+
+.modal-body {
+  padding: 14px 16px 18px;
+}
+
+/* Bottom nav: better thumb usability */
+.bottom-nav {
+  width: calc(100% - 16px);
+  border-radius: 22px;
+  padding: 6px 6px calc(8px + env(safe-area-inset-bottom));
+}
+
+.nav-item {
+  padding: 9px 4px;
+}
+
+.nav-label {
+  font-size: 0.6rem;
+  max-width: 62px;
+}
+
+/* Accessibility focus */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid rgba(162, 59, 104, 0.45);
+  outline-offset: 2px;
+}
+
+/* Mobile tuning */
+@media (max-width: 430px) {
+  .home-hero-v2 {
+    margin: 12px 12px 12px;
+    padding: 20px 14px 16px;
+  }
+
+  .home-hero-v2 h2 {
+    font-size: 1.9rem;
+    max-width: 210px;
+  }
+
+  .home-stats-v2,
+  .body-map-container,
+  .body-section-heading {
+    margin-left: 12px;
+    margin-right: 12px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .home-hero-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .screen-header {
+    margin: 6px 12px 12px;
+    padding: 14px 14px 10px;
+  }
+
+  .screen-header h2 {
+    font-size: 1.35rem;
+  }
+
+  .nav-icon {
+    font-size: 1.12rem;
+  }
+}
