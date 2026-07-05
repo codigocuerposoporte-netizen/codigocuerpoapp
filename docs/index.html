@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CÓDIGO CUERPO</title>
+
+<!-- PWA: Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- PWA: iOS (iPhone/iPad) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="CódigoCuerpo">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
+
+<!-- PWA: Android / general -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#c4705a">
+<meta name="description" content="La app que traduce el lenguaje de tu cuerpo">
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ═══════════════════════ ACCESO ═══════════════════════ -->
+<div id="access-screen" class="access-screen hidden">
+  <div class="access-content">
+    <div class="access-logo">
+      <span class="access-brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 18c-4.2-2.2-6.8-5.5-6.8-8.7 0-2.2 1.4-3.8 3.4-3.8 1.4 0 2.6.8 3.4 2 .8-1.2 2-2 3.4-2 2 0 3.4 1.6 3.4 3.8 0 3.2-2.6 6.5-6.8 8.7" fill="#c4705a"/></svg></span>
+      <h1 class="access-title">CÓDIGO<br><span>CUERPO</span></h1>
+      <p class="access-subtitle" id="access-subtitle"></p>
+    </div>
+    <div class="access-visual"><img src="body-character-transparent.png" alt=""></div><div class="access-card">
+      <p class="access-prompt" id="access-prompt"></p>
+      <p class="access-hint" id="access-hint"></p>
+      <div class="access-input-row">
+        <input type="text" id="access-code-input"
+          placeholder="Ej: ROSA-1001"
+          autocomplete="off" autocapitalize="characters" spellcheck="false"
+          maxlength="30"
+          onkeydown="if(event.key==='Enter')verifyCode()">
+      </div>
+      <div id="access-error" class="access-error hidden"></div>
+      <button class="btn-primary" onclick="verifyCode()">Activar acceso</button>
+      <p class="access-contact">¿Problemas? Escríbenos y lo resolvemos enseguida </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SPLASH ═══════════════════════ -->
+<div id="splash-screen" class="splash hidden">
+  <div class="splash-content">
+    <div class="splash-logo">
+      <span class="access-brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 18c-4.2-2.2-6.8-5.5-6.8-8.7 0-2.2 1.4-3.8 3.4-3.8 1.4 0 2.6.8 3.4 2 .8-1.2 2-2 3.4-2 2 0 3.4 1.6 3.4 3.8 0 3.2-2.6 6.5-6.8 8.7" fill="#c4705a"/></svg></span>
+      <h1 class="splash-title">CÓDIGO<br><span>CUERPO</span></h1>
+      <p class="splash-subtitle">La app que traduce el lenguaje de tu cuerpo</p>
+    </div>
+    <div class="splash-message">
+      <p>Hola, hermosa. Me alegra que estés aquí.</p>
+      <p>Este es un espacio solo para ti, para escuchar lo que tu cuerpo tiene que decir. Sin juicios. Con todo el amor.</p>
+    </div>
+    <div class="splash-name-form">
+      <label for="user-name-input">¿Cómo te llamo, cariño?</label>
+      <input type="text" id="user-name-input" placeholder="Tu nombre..." maxlength="30" autocomplete="off">
+    </div>
+    <button class="btn-primary" onclick="completeSplash()">Empezamos</button>
+    <button class="btn-ghost" onclick="completeSplash()">Entrar sin nombre</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════ APP ═══════════════════════ -->
+<div id="app" class="app hidden">
+
+  <header class="app-header">
+    <span class="header-logo"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 18c-4.2-2.2-6.8-5.5-6.8-8.7 0-2.2 1.4-3.8 3.4-3.8 1.4 0 2.6.8 3.4 2 .8-1.2 2-2 3.4-2 2 0 3.4 1.6 3.4 3.8 0 3.2-2.6 6.5-6.8 8.7" fill="currentColor"/></svg></span></span>
+    <span id="header-greeting" class="header-greeting"></span>
+    <button class="header-logout-btn" onclick="logOut()" title="Cerrar sesión" aria-label="Cerrar sesión"><span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5z" fill="currentColor"/></svg></span></button>
+  </header>
+
+  <main class="app-main">
+
+    <!-- ── PANTALLA: HOY ── -->
+    <section id="screen-home" class="screen active home-screen-v2">
+      <div class="home-hero-v2">
+        <div class="home-hero-copy">
+          <div class="home-hero-topline">BIODESCODIFICACIÓN · CUERPO</div>
+          <h2>Hola, <span id="home-name">hermosa</span></h2>
+          <p>Registra una señal corporal, descubre el patrón emocional y vuelve a tu centro con una práctica guiada.</p>
+        </div>
+        <div class="home-hero-character" aria-hidden="true"><img src="body-character-transparent.png" alt=""></div>
+        <div class="home-hero-actions">
+          <button class="btn-primary" onclick="document.getElementById('body-map')?.scrollIntoView({behavior:'smooth',block:'center'})">
+            <span class="premium-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7Z" fill="currentColor"/></svg></span> Registrar señal
+          </button>
+          <button class="btn-ghost" onclick="openDictionary()">Explorar diccionario</button>
+        </div>
+      </div>
+      <div id="body-map" class="body-map-container"></div>
+    </section>
+
+  </main>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
